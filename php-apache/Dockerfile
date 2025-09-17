@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 
+ENV DEBIAN_FRONTEND=noninteractive TZ=Asia/Tokyo
 # 必要パッケージ & PHP5.6
 RUN apt-get update && apt-get install -y \
     software-properties-common wget unzip curl git nano zip \
