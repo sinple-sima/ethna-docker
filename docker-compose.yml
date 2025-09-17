@@ -1,0 +1,47 @@
+services:
+  web:
+    build: ./php-apache
+    container_name: ethna-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: ethna
+      DB_PASS: ethna_pass
+      DB_NAME: ethna_db
+    stdin_open: true
+    tty: true
+
+  db:
+    image: mariadb:10.5
+    container_name: ethna-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ethna_db
+      MYSQL_USER: ethna
+      MYSQL_PASSWORD: ethna_pass
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2
+    container_name: ethna-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpass
+    depends_on:
+      - db
+
+volumes:
+  db_data:
